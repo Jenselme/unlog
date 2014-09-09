@@ -3,8 +3,10 @@ import re
 
 
 class Unlog:
+    """Unlog the output according to pattern passed in the *args* argument."""
     def __init__(self, args):
-        self._output_filter = Filter()
+        self._output_filter = Filter(error_pattern=args.error_pattern,
+                                     start_pattern=args.start_pattern)
         if args.files:
             self._files = args.files
             self.process_files()
@@ -30,8 +32,9 @@ class Unlog:
 
 
 class Filter:
+    """Allow the output to be filtered according to the pattern."""
     def __init__(self, error_pattern="(error|warning)",
-            start_pattern=r"/home/assos/drupal7/sites/assos.centrale-marseille.fr.\w"):
+            start_pattern=r".*"):
         self._stack = []
         self._error_pattern = re.compile(error_pattern, re.I)
         self._start_patern = re.compile(start_pattern, re.I)
