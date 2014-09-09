@@ -9,8 +9,7 @@ class Unlog:
             self._files = args.files
             self.process_files()
         else:
-            for line in iter(sys.stdin.readline, ''):
-                self._output_filter.process_line(line)
+            self.process_stdin()
 
     def process_files(self):
         for file in self._files:
@@ -24,6 +23,10 @@ class Unlog:
         except IOError as e:
             sys.stderr.write(str(e))
             sys.stderr.write("\n")
+
+    def process_stdin(self):
+        for line in iter(sys.stdin.readline, ''):
+            self._output_filter.process_line(line)
 
 
 class Filter:
