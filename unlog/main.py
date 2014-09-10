@@ -14,13 +14,14 @@ def main():
     parser.add_argument('files', metavar='files', nargs='*',
                         help='The file which must be unlogged.')
     parser.add_argument('--start-pattern', '-s', dest='start_pattern',
-                        required=True,
                         help='The start pattern. Required to know where a group '
                         'of lines start.')
     parser.add_argument('--error-pattern', '-e', dest='error_pattern',
                         default=r'(error|warning)',
                         help='The error pattern. Only group of lines containing '
                         'this pattern will be printed')
+    parser.add_argument('--config', '-c', dest='config_file', default='~/.unlog',
+                        help='Use a different config file from ~/.unlog')
     args = parser.parse_args()
 
     Unlog(args)
