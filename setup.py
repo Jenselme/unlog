@@ -24,7 +24,7 @@ setup(
     author = "Julien Enselme",
     author_email = "jenselme@jujens.eu",
     description = "Python script to easy unloging.",
-    license = "BSD",
+    license = "MIT",
     keywords="log",
     url = "https://bitbucket.org/Jenselme/dcvsapi",
     classifiers="""Development Status :: 2 - Pre-Alpha
