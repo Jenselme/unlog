@@ -5,10 +5,24 @@ import re
 class Unlog:
     """Unlog the output according to pattern passed in the *args* argument."""
     def __init__(self, args):
-        self._output_filter = Filter(error_pattern=args.error_pattern,
-                                     start_pattern=args.start_pattern)
-        if args.files:
-            self._files = args.files
+        self._args = args
+        self._check_args()
+        if args.start_pattern:
+            self._filter_from_args()
+    def _check_args(self):
+        if not self._args.files and not self._args.start_pattern:
+            sys.stderr.write('You must give a file or a start pattern.\n')
+            sys.exit(2)
+
+    def _filter_from_args(self):
+        """Filter the files or stdin according to the patterns give by the
+        arguments provided on the command line.
+        """
+        self._output_filter = Filter(error_pattern=self._args.error_pattern,
+                                     start_pattern=self._args.start_pattern)
+        # If no files are provided, read from stdin
+        if self._args.files:
+            self._files = self._args.files
             self.process_files()
         else:
             self.process_stdin()
