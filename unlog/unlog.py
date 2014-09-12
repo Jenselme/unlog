@@ -1,7 +1,11 @@
 import sys
 import re
 import os
-import configparser
+
+try:
+    from config import Config
+except ImportError:
+    from unlog.config import Config
 
 
 class Unlog:
@@ -51,7 +55,7 @@ class Unlog:
 
     def _filter_from_config(self):
         """Filter the files according to the patterns defined in the config files."""
-        self._load_config(self._args.config_file)
+        self._config = Config(self._args.config_file)
         for file in self._args.files:
             file = self._correct_path_input_file(file)
             self.process_file_filter_from_config(file)
@@ -75,10 +79,6 @@ class Unlog:
                              .format(file, self._args.config_file))
             return False
         return True
-
-    def _load_config(self, config_file):
-        self._config = configparser.ConfigParser()
-        self._config.read(config_file)
 
 
 class Filter:
