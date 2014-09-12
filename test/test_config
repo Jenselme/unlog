@@ -1,3 +1,3 @@
-[/home/jenselme/projects/unlog/test/program_output_config]
+[~/*/unlog/test/program_output_config]
 start pattern = /home/assos/drupal7/sites/assos.centrale-marseille.fr.\w
 error pattern = (error|warning)
