@@ -3,5 +3,5 @@ python:
  - "3.2"
  - "3.3"
  - "3.4"
-install: pip install pytest sh setuptools
+install: pip install sh
 script:  ./setup.py test
