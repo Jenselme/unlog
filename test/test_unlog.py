@@ -38,8 +38,18 @@ def test_basic_filter_config():
         assert correctly_filtered_output.read() == output.getvalue()
 
 
+def test_use_config_section():
+    output = StringIO()
+    python3(path2main, program_output, u='TEST',
+            config='test/test_config', _out=output)
+
+    with open(program_output_filtered, 'r') as correctly_filtered_output:
+        assert correctly_filtered_output.read() == output.getvalue()
+
+
 def test_mail():
     output = StringIO()
     python3(path2main, 'test/program_output_mail', config='test/test_config', _err=output)
+
     with open('test/program_output_filtered_mail', 'r') as correctly_filtered_output:
         assert correctly_filtered_output.read() == output.getvalue()

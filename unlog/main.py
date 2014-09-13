@@ -22,6 +22,9 @@ def main():
                         'this pattern will be printed')
     parser.add_argument('--config', '-c', dest='config_file', default='~/.unlog',
                         help='Use a different config file from ~/.unlog')
+    parser.add_argument('--use-config-section', '-u', dest='use_config_section',
+                        help='Unlog will use the provided config section to '
+                        'process the file or stdin.')
     parser.add_argument('--mail-to', '-t', dest='mail_to',
                         help='Send the report by email to the provided address '
                         'instead of printing the result to the command line. If'

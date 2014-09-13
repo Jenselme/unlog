@@ -1,6 +1,7 @@
 import glob
 import os
 import configparser
+
 try:
     from filter import Filter
 except ImportError:
@@ -8,9 +9,12 @@ except ImportError:
 
 
 class Config():
+    CONFIG_FILTER_KEYS_EXCLUDED = ['files', 'config_file', 'use_config_section']
+
     def __init__(self, command_line_args):
         self._args = command_line_args  # Used to override the necessary variable
-        config_file = self._args.config_file,
+        config_file = self._args.config_file
+        self._use_config_section = self._args.use_config_section
         self._config = configparser.ConfigParser()
         self._config.read(config_file)
 
@@ -28,6 +32,9 @@ class Config():
         """Returns the name of the config_section and takes into account ~ ($HOME)
         and blobs.
         """
+        if self._use_config_section:
+            return self._use_config_section
+
         for config_section in self._config:
             config_section_user_expanded = os.path.expanduser(config_section)
             possible_section_names = glob.glob(config_section_user_expanded)
@@ -48,7 +55,7 @@ class Config():
             config_filter[new_key] = item
 
         for key, item in self._args.__dict__.items():
-            if item is not None and key != 'files' and key != 'config_file':
+            if item is not None and key not in self.CONFIG_FILTER_KEYS_EXCLUDED:
                 config_filter[key] = item
 
         return config_filter

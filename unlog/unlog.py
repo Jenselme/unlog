@@ -30,8 +30,11 @@ class Unlog:
         arguments provided on the command line.
         """
         config = copy.copy(self._args.__dict__)
+        # Must not be passed to filter (unuseful)
         del config['files']
+        # The following key are only used when processing from a config file
         del config['config_file']
+        del config['use_config_section']
         self._output_filter = Filter(**config)
         # If no files are provided, read from stdin
         if self._args.files:
