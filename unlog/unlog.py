@@ -21,7 +21,8 @@ class Unlog:
             self._filter_from_config()
 
     def _check_args(self):
-        if not self._args.files and not self._args.start_pattern:
+        if not self._args.files and not self._args.start_pattern \
+        and not self._args.use_config_section:
             sys.stderr.write('You must give a file or a start pattern.\n')
             sys.exit(2)
 
@@ -63,6 +64,13 @@ class Unlog:
     def _filter_from_config(self):
         """Filter the files according to the patterns defined in the config files."""
         self._config = Config(self._args)
+        if self._args.files:
+            self.process_files_from_config()
+        else:
+            self._output_filter = self._config.get_filter()
+            self.process_stdin()
+
+    def process_files_from_config(self):
         for file_name in self._args.files:
             file_name = self._correct_path_input_file(file_name)
             self.process_file_filter_from_config(file_name)

@@ -21,7 +21,7 @@ class Config():
     def __getitem__(self, key):
         return self._config[key]
 
-    def get_filter(self, section_name):
+    def get_filter(self, section_name=''):
         """Returns the Filter association with the asked section if it exits."""
         config_section = self._get_config_section(section_name)
         if config_section:

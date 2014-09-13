@@ -29,6 +29,15 @@ def test_basic_filter_pipe():
         assert correctly_filtered_output.read() == output.getvalue()
 
 
+def test_filter_pipe_config():
+    output = StringIO()
+    python3(cat(program_output), path2main, config='test/test_config',
+            use_config_section='TEST', _out=output)
+
+    with open(program_output_filtered, 'r') as correctly_filtered_output:
+        assert correctly_filtered_output.read() == output.getvalue()
+
+
 def test_basic_filter_config():
     "Filter the file according to the config file."
     output = StringIO()
