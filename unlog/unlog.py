@@ -25,6 +25,10 @@ class Unlog:
         and not self._args.use_config_section:
             sys.stderr.write('You must give a file or a start pattern.\n')
             sys.exit(2)
+        if (self._args.start_group_pattern and not self._args.end_group_pattern)\
+        or (not self._args.start_group_pattern and self._args.end_group_pattern):
+            sys.stderr.write('You must --start-group and --end-group.')
+            sys.exit(2)
 
     def _filter_from_args(self):
         """Filter the files or stdin according to the patterns give by the

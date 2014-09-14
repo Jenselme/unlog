@@ -66,3 +66,60 @@ Example
 	  mail from = unlog@jujens.eu
 	  mail to = jenselme@ec-m.fr
 	  mail subject = Pytest unlog
+
+
+Group
+=====
+
+If the log has group (eg by command or by date), unlog can group the
+output. Simply provide a ``start group pattern`` (or ``--start-group``) and a
+``end group pattern`` (or ``--end-group``) in your config file (or in the
+command line).
+
+Example
+-------
+
+With the following log:
+
+::
+
+   %%%% Drush cron — 2014-09-15
+   /home/assos/drupal7/sites/assos.centrale-marseille.fr.jenselmetest
+   Cron run successful.                                                 [1;32;40m[1m[success][0m
+   /home/assos/drupal7/sites/assos.centrale-marseille.fr.jenselme
+   WD php: PDOException: SQLSTATE[HY000] [2002] Operation timed out in  [31;40m[1m[error][0m
+   drupal_is_denied() (line 1916 of
+   /home/assos/drupal7/includes/bootstrap.inc).
+   PDOException: SQLSTATE[HY000] [2002] Operation timed out in drupal_is_denied() (line 1916 of /home/assos/drupal7/includes/bootstrap.inc).
+   Drush command terminated abnormally due to an unrecoverable error.   [31;40m[1m[error][0m
+   /home/assos/drupal7/sites/assos.centrale-marseille.fr.jenselmetest2
+   Cron run successful.                                                 [1;32;40m[1m[success][0m
+   %%%% END
+
+and this config:
+
+.. code:: ini
+
+	  [TEST]
+	  start pattern = /home/assos/drupal7/sites/assos.centrale-marseille.fr.\w
+	  error pattern = (error|warning)
+
+	  [~/*/unlog/test/program_output_group]
+	  include = TEST
+	  start group pattern = %%%% (?P<command>\w+) — (?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})
+	  end group pattern = %%%% END
+
+You get this output:
+
+::
+
+   GROUP: Drush cron — 2014-09-15
+   /home/assos/drupal7/sites/assos.centrale-marseille.fr.jenselme
+   WD php: PDOException: SQLSTATE[HY000] [2002] Operation timed out in  [31;40m[1m[error][0m
+   drupal_is_denied() (line 1916 of
+   /home/assos/drupal7/includes/bootstrap.inc).
+   END GROUP: Drush cron — 2014-09-15
+
+You are not compelled to use the ``?P<command>`` and ``?P<date>``. If they are
+present, their content will be printed on the ``GROUP:`` line. Otherwise,
+nothing will be printed.

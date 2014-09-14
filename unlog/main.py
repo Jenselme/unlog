@@ -39,6 +39,11 @@ def main():
     parser.add_argument('--no-mail', dest='no_mail', action='store_true',
                         help='Print the output to stdout, even if a mail address'
                         ' is provided.')
+    parser.add_argument('--start-group', dest='start_group_pattern',
+                        help='Pattern to start a group.')
+    parser.add_argument('--end-group', dest='end_group_pattern',
+                        help='Pattern to end a group. A line that match this '
+                        'pattern will be ignored.')
     args = parser.parse_args()
 
     Unlog(args)

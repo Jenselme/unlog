@@ -1,0 +1,49 @@
+GROUP: Drush cron - 2014-09-14
+/home/assos/drupal7/sites/assos.centrale-marseille.fr.jenselmetest
+Command core-cron needs a higher bootstrap level to run - you will   [31;40m[1m[error][0m
+need to invoke drush from a more functional Drupal environment to run
+this command.
+The drush command 'cron' could not be executed.                      [31;40m[1m[error][0m
+Drush was not able to start (bootstrap) the Drupal database.         [31;40m[1m[error][0m
+Hint: This may occur when Drush is trying to:
+ * bootstrap a site that has not been installed or does not have a
+configured database. In this case you can select another site with a
+working database setup by specifying the URI to use with the --uri
+parameter on the command line. See `drush topic docs-aliases` for
+details.
+ * connect the database through a socket. The socket file may be
+wrong or the php-cli may have no access to it in a jailed shell. See
+http://drupal.org/node/1428638 for details.
+
+Drush was attempting to connect to:
+ Drupal version        :  7.28
+ Site URI              :  http://assos.centrale-marseille.fr.jensel
+                          metest
+ Database driver       :  mysql
+ Database username     :  jenselmetest
+ Database name         :  jenselmetest
+ Default theme         :  garland
+ Administration        :  garland
+ theme
+ PHP executable        :  /usr/local/bin/php
+ PHP configuration     :  /usr/local/etc/php.ini
+ PHP OS                :  FreeBSD
+ Drush version         :  6.2.0
+ Drush configuration   :
+ Drush alias files     :  /home/assos/.drush/aliases.drushrc.php
+ Drupal root           :  /home/assos/drupal7
+ Site path             :  sites/assos.centrale-marseille.fr.jenselm
+                          etest
+ File directory path   :  sites/assos.centrale-marseille.fr.jenselm
+                          etest/files
+
+
+END GROUP: Drush cron - 2014-09-14
+GROUP: Drush cron - 2014-09-15
+/home/assos/drupal7/sites/assos.centrale-marseille.fr.ksi
+WD php: PDOException: SQLSTATE[HY000] [2002] Operation timed out in  [31;40m[1m[error][0m
+drupal_is_denied() (line 1916 of
+/home/assos/drupal7/includes/bootstrap.inc).
+PDOException: SQLSTATE[HY000] [2002] Operation timed out in drupal_is_denied() (line 1916 of /home/assos/drupal7/includes/bootstrap.inc).
+Drush command terminated abnormally due to an unrecoverable error.   [31;40m[1m[error][0m
+END GROUP: Drush cron - 2014-09-15

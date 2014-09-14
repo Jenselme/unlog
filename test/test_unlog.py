@@ -62,3 +62,11 @@ def test_mail():
 
     with open('test/program_output_filtered_mail', 'r') as correctly_filtered_output:
         assert correctly_filtered_output.read() == output.getvalue()
+
+
+def test_filter_group():
+    output = StringIO()
+    python3(path2main, 'test/program_output_group', config='test/test_config', _out=output)
+
+    with open('test/program_output_filtered_group', 'r') as correctly_filtered_output:
+        assert correctly_filtered_output.read() == output.getvalue()

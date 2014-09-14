@@ -11,3 +11,8 @@ error pattern = (error|warning)
 mail from = unlog@jujens.eu
 mail to = jenselme@ec-m.fr
 mail subject = Pytest unlog
+
+[~/*/unlog/test/program_output_group]
+include = TEST
+start group pattern = #### (?P<command>.+) - (?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})
+end group pattern = #### END

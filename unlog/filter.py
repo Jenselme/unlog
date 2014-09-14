@@ -7,7 +7,8 @@ class Filter:
     """Allow the output to be filtered according to the pattern."""
     def __init__(self, error_pattern="(error|warning)", start_pattern=r".*",
                  no_mail=False, mail_to=None, mail_from='unlog@localhost',
-                 mail_subject='Unlog report'):
+                 mail_subject='Unlog report', start_group_pattern=None,
+                 end_group_pattern=None):
         self._stack = []
         self._mail_lines = []
         self._error_pattern = re.compile(error_pattern, re.I)
@@ -16,6 +17,11 @@ class Filter:
         self._mail_to = mail_to
         self._mail_from = mail_from
         self._mail_subject = mail_subject
+        self._start_group_pattern = re.compile(start_group_pattern) \
+                                    if start_group_pattern else None
+        self._end_group_pattern = re.compile(end_group_pattern) \
+                                    if end_group_pattern else None
+        self._group_message = ''
 
     def process_file(self, file):
         for line in file:
@@ -24,10 +30,21 @@ class Filter:
 
     def process_line(self, line):
         self.check_start(line)
-        self._stack.append(line)
+        if not self._must_ignore_line(line):
+            self._stack.append(line)
+        self.check_end(line)
 
     def check_start(self, line):
-        if self._start_patern.search(line):
+        if self._has_group_patterns()\
+        and self._start_group_pattern.match(line):
+            m = self._start_group_pattern.match(line)
+            self._group_message = ' - '.join(m.groups())
+            start_group_message = 'GROUP: {}\n'.format(self._group_message)
+            if self._must_display_sdout():
+                sys.stdout.write(start_group_message)
+            else:
+                self._mail_lines.append(start_group_message)
+        elif self._start_patern.search(line):
             self.print_stack()
             self._stack = []
 
@@ -77,3 +94,29 @@ class Filter:
             sys.stderr.write(str(e))
             sys.stderr.write('\n')
             sys.stderr.write('DEBUG: Message content:\n\n{}'.format(str(msg)))
+
+    def _must_ignore_line(self, line):
+        """Returns True if the line must not be appended to the _stack."""
+        if self._has_group_patterns()\
+        and (self._start_group_pattern.search(line) or self._end_group_pattern.search(line)):
+            return True
+        else:
+            return False
+
+    def _has_group_patterns(self):
+        """Returns True if we must perform the checks that depend on group patterns."""
+        return self._start_group_pattern is not None\
+            and self._end_group_pattern is not None
+
+    def check_end(self, line):
+        """Append END GROUP to _stack if line matches the end_group_pattern and
+        displays it.
+        """
+        if self._has_group_patterns() and self._end_group_pattern.match(line):
+            end_group_message = 'END GROUP: {}\n'.format(self._group_message)
+            self.print_stack()
+            self._stack = []
+            if self._must_display_sdout():
+                sys.stdout.write(end_group_message)
+            else:
+                self._mail_lines.append(end_group_message)
