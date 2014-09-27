@@ -1,6 +1,3 @@
-Unlog
-=====
-
 The purpose of this software is to help you filter logs when you need to view
 more than the line containing the error pattern. The advantage of ``unlog``
 versus ``grep`` with the ``-A`` or ``-B`` options is that ``unlog`` only print
@@ -33,7 +30,7 @@ unlog --error-pattern error --start-pattern
 
 
 Configuration file
-==================
+------------------
 
 You can use a configuration file. By default, unlog will look for
 ``~/.unlog``. With the ``--config`` option you can select your own.
@@ -47,7 +44,7 @@ specify which section to use with the ``--use-config-section`` argument.
 
 
 Example
--------
+~~~~~~~
 
 .. code:: ini
 
@@ -69,7 +66,7 @@ Example
 
 
 Group
-=====
+-----
 
 If the log has group (eg by command or by date), unlog can group the
 output. Simply provide a ``start group pattern`` (or ``--start-group``) and a
@@ -77,7 +74,7 @@ output. Simply provide a ``start group pattern`` (or ``--start-group``) and a
 command line).
 
 Example
--------
+~~~~~~~
 
 With the following log:
 

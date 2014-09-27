@@ -10,11 +10,20 @@ except ImportError:
 
 
 class Config():
+    """Holds the configuration from a configuration file. It will create the Filter
+    object based on the parameters of the configuration file.
+    """
+
+    #: keys that are present in the config file but that must be ignored when creating the Filter object.
     CONFIG_FILTER_KEYS_EXCLUDED = ['files', 'config_file', 'use_config_section',
                                    'include', ]
 
     def __init__(self, command_line_args):
-        self._args = command_line_args  # Used to override the necessary variable
+        """**PARAMETERS**
+
+        * *command_line_args* - Used to override the necessary variable.
+        """
+        self._args = command_line_args
         config_file = self._args.config_file
         self._use_config_section = self._args.use_config_section
         self._config = configparser.ConfigParser()
@@ -24,7 +33,8 @@ class Config():
         return self._config[key]
 
     def get_filter(self, section_name=''):
-        """Returns the Filter association with the asked section if it exits."""
+        """Returns the Filter association with the asked section if it exits.
+        """
         config_section = self._get_config_section(section_name)
         if config_section:
             config_filter = self._get_config_filter(section_name, config_section)

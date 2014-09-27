@@ -1,5 +1,53 @@
 #!/usr/bin/python3
 
+"""
+usage: main.py [-h] [--start-pattern START_PATTERN]
+               [--error-pattern ERROR_PATTERN] [--config CONFIG_FILE]
+               [--use-config-section USE_CONFIG_SECTION] [--mail-to MAIL_TO]
+               [--mail-from MAIL_FROM] [--mail-subject MAIL_SUBJECT]
+               [--no-mail] [--start-group START_GROUP_PATTERN]
+               [--end-group END_GROUP_PATTERN]
+               [files [files ...]]
+
+Filter print the line of the output from a starting pattern only if it
+contains an error pattern.
+
+positional arguments:
+  files                 The file which must be unlogged.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --start-pattern START_PATTERN, -s START_PATTERN
+                        The start pattern. Required to know where a group of
+                        lines start.
+  --error-pattern ERROR_PATTERN, -e ERROR_PATTERN
+                        The error pattern. Only group of lines containing this
+                        pattern will be printed
+  --config CONFIG_FILE, -c CONFIG_FILE
+                        Use a different config file from ~/.unlog
+  --use-config-section USE_CONFIG_SECTION, -u USE_CONFIG_SECTION
+                        Unlog will use the provided config section to process
+                        the file or stdin.
+  --mail-to MAIL_TO, -t MAIL_TO
+                        Send the report by email to the provided address
+                        instead of printing the result to the command line. If
+                        a mail address is present in the configuration file,
+                        this parameter will override it.
+  --mail-from MAIL_FROM, -f MAIL_FROM
+                        Send the email with this address in the FROM field. If
+                        a from address is present in the configuration file,
+                        this parameter override it.
+  --mail-subject MAIL_SUBJECT
+                        The subject of the email to send.
+  --no-mail             Print the output to stdout, even if a mail address is
+                        provided.
+  --start-group START_GROUP_PATTERN
+                        Pattern to start a group.
+  --end-group END_GROUP_PATTERN
+                        Pattern to end a group. A line that match this pattern
+                        will be ignored.
+"""
+
 import argparse
 try:
     from unlog import Unlog

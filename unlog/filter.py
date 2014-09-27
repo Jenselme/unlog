@@ -4,11 +4,29 @@ import smtplib
 from email.mime.text import MIMEText
 
 class Filter:
-    """Allow the output to be filtered according to the pattern."""
+    """Defines how to filter.
+    """
+
     def __init__(self, error_pattern="(error|warning)", start_pattern=r".*",
                  no_mail=False, mail_to=None, mail_from='unlog@localhost',
                  mail_subject='Unlog report', start_group_pattern=None,
                  end_group_pattern=None):
+        """**PARAMETERS**
+
+    * *error_pattern* - A regular expression that match the lines containing the
+      errors. They will be displayed. Default: '(error|warning)'
+    * *start_pattern* - A regular expression that match the 1st line. Default: '(.*)'
+    * *no_mail* - Disable the sending of email. It has no effect if mail_to is
+      None. Default: False.
+    * *mail_to* - Email to address to which the output of the command must be sent.
+      Default: None
+    * *mail_from* - Which address the email must be send to. Default: 'unlog@localhost'
+    * *mail_subject* - The subject of the report email. Default: 'Unlog report'
+    * *start_group_pattern* - An optional regular expression matching the start
+       of a log group (eg the ouput of one command). Default: None.
+    * *end_group_pattern* - An optional regual expression matching the end of a
+      log group. Default: None.
+        """
         self._stack = []
         self._mail_lines = []
         self._error_pattern = re.compile(error_pattern, re.I)
@@ -24,17 +42,26 @@ class Filter:
         self._group_message = ''
 
     def process_file(self, file):
+        """Loop over each line of a file and process them with
+        :py:meth:`process_line`.
+        """
         for line in file:
             self.process_line(line)
         self.send_mail()
 
     def process_line(self, line):
+        """Calls :py:meth:`check_start` for each line and add the line to the
+        stack unless it must be ignored. Finnally call :py:meth:`check_end`.
+        """
         self.check_start(line)
         if not self._must_ignore_line(line):
             self._stack.append(line)
         self.check_end(line)
 
     def check_start(self, line):
+        """Checks if the current line match the start group or start pattern. Empty
+        the stack if it matches a start pattern.
+        """
         if self._has_group_patterns()\
         and self._start_group_pattern.match(line):
             m = self._start_group_pattern.match(line)
@@ -49,6 +76,8 @@ class Filter:
             self._stack = []
 
     def print_stack(self):
+        """Prints the stack to stdout or add the line the _email_lines list.
+        """
         if self.match() and self._must_display_sdout():
             for line in self._stack:
                 sys.stdout.write(line)
@@ -56,18 +85,26 @@ class Filter:
             self._mail_lines.extend(self._stack)
 
     def match(self):
+        """Returns True if at least a line of the stack matche the error pattern.
+        """
         for line in self._stack:
             if self._error_pattern.search(line):
                 return True
 
     def _must_display_sdout(self):
+        """Returns True must the output must be displayed on stdout.
+        """
         return self._no_mail or self._mail_to is None
 
     def _must_send_email(self):
+        """Returns True if the output must be send by email.
+        """
         return not self._must_display_sdout()
 
     def send_mail(self):
-        """Send the msg using the localhost as SMTP server."""
+        """Send the msg using the localhost as SMTP server. If no SMTP server is
+        available on localhost, it will crash.
+        """
         if self._must_send_email():
             msg = self._prepare_message()
             self._send_message(msg)
@@ -75,7 +112,7 @@ class Filter:
     def _prepare_message(self):
         """Prepare the _stack so it can be send by email.
 
-        **Returns** - a MIMEText containing the message.
+        **RETURN** - a MIMEText containing the message.
         """
         msg = MIMEText(''.join(self._mail_lines))
         msg['Subject'] = self._mail_subject
@@ -85,6 +122,8 @@ class Filter:
         return msg
 
     def _send_message(self, msg):
+        """Send a MIMEText message or print an error to stderr in case of failure.
+        """
         try:
             s = smtplib.SMTP('localhost')
             s.send_message(msg)
@@ -96,7 +135,8 @@ class Filter:
             sys.stderr.write('DEBUG: Message content:\n\n{}'.format(str(msg)))
 
     def _must_ignore_line(self, line):
-        """Returns True if the line must not be appended to the _stack."""
+        """Returns True if the line must not be appended to the _stack.
+        """
         if self._has_group_patterns()\
         and (self._start_group_pattern.search(line) or self._end_group_pattern.search(line)):
             return True
@@ -104,7 +144,8 @@ class Filter:
             return False
 
     def _has_group_patterns(self):
-        """Returns True if we must perform the checks that depend on group patterns."""
+        """Returns True if we must perform the checks that depend on group patterns.
+        """
         return self._start_group_pattern is not None\
             and self._end_group_pattern is not None
 

@@ -11,8 +11,16 @@ except ImportError:
 
 
 class Unlog:
-    """Unlog the output according to pattern passed in the *args* argument."""
+    """Filter the output of a command or a log file according to pattern passed
+    in the *args* argument or according to a config file.
+    """
+
     def __init__(self, args):
+        """    **PARAMETERS**
+
+        * *args* - an ArgumentParser object containing all the option. Look at
+          :py:mod:`unlog.main` for the list of opitons.
+      """
         self._args = args
         self._check_args()
         if args.start_pattern:
@@ -21,6 +29,9 @@ class Unlog:
             self._filter_from_config()
 
     def _check_args(self):
+        """Verify that the arguments are coherent. Exit with error code 2 if
+        incoherences are fonud.
+        """
         if not self._args.files and not self._args.start_pattern \
         and not self._args.use_config_section:
             sys.stderr.write('You must give a file or a start pattern.\n')
@@ -49,10 +60,14 @@ class Unlog:
             self.process_stdin()
 
     def process_files(self):
+        """Loop on each file given on the command line and process them.
+        """
         for file in self._files:
             self.process_file(file)
 
     def process_file(self, file_name):
+        """Open file_name and process it with :py:meth:`unlog.filter.Filter.process_file`
+        """
         try:
             with open(file_name, 'r') as file:
                 self._output_filter.process_file(file)
@@ -61,12 +76,17 @@ class Unlog:
             sys.stderr.write("\n")
 
     def process_stdin(self):
+        """Process each line on the stdin with
+        :py:meth:`unlog.filter.Filter.process_line`
+        """
         for line in iter(sys.stdin.readline, ''):
             self._output_filter.process_line(line)
         self._output_filter.send_mail()
 
     def _filter_from_config(self):
-        """Filter the files according to the patterns defined in the config files."""
+        """Filter the files according to the patterns defined in the
+        configuration file.
+        """
         self._config = Config(self._args)
         if self._args.files:
             self.process_files_from_config()
@@ -75,18 +95,26 @@ class Unlog:
             self.process_stdin()
 
     def process_files_from_config(self):
+        """Loop over each file given on the command line and process them
+        according to the actions defined in the associated config file. The file
+        is then passed to :py:meth:`process_file_filter_from_config`.
+        """
         for file_name in self._args.files:
             file_name = self._correct_path_input_file(file_name)
             self.process_file_filter_from_config(file_name)
 
     def _correct_path_input_file(self, file_name):
-        """Expand the ~ variable and transform a relative path into an absolute one."""
+        """Expand the ~ variable and transform a relative path into an absolute
+        one.
+        """
         file_name = os.path.expanduser(file_name)
         file_name = os.path.abspath(file_name)
         return file_name
 
     def process_file_filter_from_config(self, file_name):
-        """Process the file_name with the filters defined in config."""
+        """Process the file_name with the filters defined in config with
+        :py:meth:`process_file`.
+        """
         self._output_filter = self._config.get_filter(file_name)
         if self._output_filter:
             self.process_file(file_name)
