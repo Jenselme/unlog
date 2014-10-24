@@ -1,12 +1,12 @@
 [TEST]
-start pattern = /home/assos/drupal7/sites/assos.centrale-marseille.fr.\w
+start pattern = /home/assos/drupal7/sites/assos.centrale-marseille.fr.\w+
 error pattern = (error|warning)
 
 [~/*/unlog/test/program_output_config]
 include = TEST
 
 [~/*/unlog/test/program_output_mail]
-start pattern = /home/assos/drupal7/sites/assos.centrale-marseille.fr.\w
+start pattern = /home/assos/drupal7/sites/assos.centrale-marseille.fr.\w+
 error pattern = (error|warning)
 mail from = unlog@jujens.eu
 mail to = jenselme@ec-m.fr
