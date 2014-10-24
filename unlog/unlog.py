@@ -81,6 +81,9 @@ class Unlog:
         """
         for line in iter(sys.stdin.readline, ''):
             self._output_filter.process_line(line)
+        # We must print the stack when we reach the last line of stdin so that the
+        # errors located at the end are displayed.
+        self._output_filter.print_stack()
         self._output_filter.send_mail()
 
     def _filter_from_config(self):

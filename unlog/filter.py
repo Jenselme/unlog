@@ -47,6 +47,8 @@ class Filter:
         """
         for line in file:
             self.process_line(line)
+        # We must print the stack when we reach the end of a file so that the
+        # errors located at the end are displayed.
         self.print_stack()
         self.send_mail()
 
