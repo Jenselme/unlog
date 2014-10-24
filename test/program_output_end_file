@@ -1,0 +1,8 @@
+/home/assos/drupal7/sites/assos.centrale-marseille.fr.jenselme
++ drush -q cron
+Command core-cron needs a higher bootstrap level to run - you will   [error]
+need to invoke drush from a more functional Drupal environment to run
+this command.
+The drush command 'cron' could not be executed.                      [error]
+A Drupal installation directory could not be found                   [error]
++ sleep 5

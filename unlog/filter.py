@@ -47,6 +47,7 @@ class Filter:
         """
         for line in file:
             self.process_line(line)
+        self.print_stack()
         self.send_mail()
 
     def process_line(self, line):

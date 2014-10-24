@@ -70,3 +70,14 @@ def test_filter_group():
 
     with open('test/program_output_filtered_group', 'r') as correctly_filtered_output:
         assert correctly_filtered_output.read() == output.getvalue()
+
+
+def test_filter_end_file():
+    output = StringIO()
+    python3(path2main, 'test/program_output_end_file',
+            start_pattern='/home/assos/drupal7/sites/assos.centrale-marseille.fr.\w',
+            error_pattern='(error|warning)',
+            _out=output)
+
+    with open('test/program_output_filtered_end_file', 'r') as correctly_filtered_output:
+        assert correctly_filtered_output.read() == output.getvalue()
