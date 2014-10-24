@@ -51,7 +51,7 @@ class Filter:
 
     def process_line(self, line):
         """Calls :py:meth:`check_start` for each line and add the line to the
-        stack unless it must be ignored. Finnally call :py:meth:`check_end`.
+        stack unless it must be ignored. Finally call :py:meth:`check_end`.
         """
         self.check_start(line)
         if not self._must_ignore_line(line):
