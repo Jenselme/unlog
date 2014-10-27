@@ -119,4 +119,4 @@ You get this output:
 
 You are not compelled to use the ``?P<command>`` and ``?P<date>``. If they are
 present, their content will be printed on the ``GROUP:`` line. Otherwise,
-nothing particular will be printed.
+nothing will be printed.

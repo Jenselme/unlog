@@ -65,12 +65,11 @@ class Filter:
         """Checks if the current line match the start group or start pattern. Empty
         the stack if it matches a start pattern.
         """
-        if self._has_group_patterns():
-            start_group_message = 'GROUP:'
-            if self._start_group_pattern.match(line):
-                m = self._start_group_pattern.match(line)
-                self._group_message = ' - '.join(m.groups())
-                start_group_message = 'GROUP: {}\n'.format(self._group_message)
+        if self._has_group_patterns()\
+        and self._start_group_pattern.match(line):
+            m = self._start_group_pattern.match(line)
+            self._group_message = ' - '.join(m.groups())
+            start_group_message = 'GROUP: {}\n'.format(self._group_message)
             if self._must_display_sdout():
                 sys.stdout.write(start_group_message)
             else:
@@ -157,10 +156,8 @@ class Filter:
         """Append END GROUP to _stack if line matches the end_group_pattern and
         displays it.
         """
-        if self._has_group_patterns():
-            end_group_message = 'END GROUP:'
-            if self._end_group_pattern.match(line):
-                end_group_message = 'END GROUP: {}\n'.format(self._group_message)
+        if self._has_group_patterns() and self._end_group_pattern.match(line):
+            end_group_message = 'END GROUP: {}\n'.format(self._group_message)
             self.print_stack()
             self._stack = []
             if self._must_display_sdout():
