@@ -129,7 +129,9 @@ class Filter:
         """
         try:
             s = smtplib.SMTP('localhost')
-            s.send_message(msg)
+            err = s.send_message(msg)
+            if err:
+                sys.stderr.write(err)
             s.quit()
         except Exception as e:
             sys.stderr.write('Sending email failed with the following message:\n')
