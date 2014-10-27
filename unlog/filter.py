@@ -131,7 +131,7 @@ class Filter:
             s = smtplib.SMTP('localhost')
             err = s.send_message(msg)
             if err:
-                sys.stderr.write(err)
+                print(err)
             s.quit()
         except Exception as e:
             sys.stderr.write('Sending email failed with the following message:\n')
