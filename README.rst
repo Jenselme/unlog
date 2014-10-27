@@ -103,8 +103,8 @@ and this config:
 
 	  [~/*/unlog/test/program_output_group]
 	  include = TEST
-	  start group pattern = %%%% (?P<command>\w+) — (?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})
-	  end group pattern = %%%% END
+	  start group pattern = #### (?P<command>\w+) — (?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})
+	  end group pattern = #### END
 
 You get this output:
 
@@ -120,3 +120,6 @@ You get this output:
 You are not compelled to use the ``?P<command>`` and ``?P<date>``. If they are
 present, their content will be printed on the ``GROUP:`` line. Otherwise,
 nothing will be printed.
+
+**The % character is used for interpolation.** Use it with
+caution.
