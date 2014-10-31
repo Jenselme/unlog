@@ -104,7 +104,7 @@ class Filter:
         """Returns True if we are dealing with an empty group, ie this filter
         has group pattern and the length of the stack is 2 (GROUP START and END).
         """
-        return self._has_group_patterns() and len(self._stack) == 2
+        return self._has_group_patterns() and len(self._stack) == 1
 
     def _must_send_email(self):
         """Returns True if the output must be send by email.
@@ -169,7 +169,8 @@ class Filter:
             end_group_message = 'END GROUP: {}\n'.format(self._group_message)
             self.print_stack()
             self._stack = []
-            if self._must_display_sdout():
-                sys.stdout.write(end_group_message)
-            else:
-                self._mail_lines.append(end_group_message)
+            if not self._empty_group():
+                if self._must_display_sdout():
+                    sys.stdout.write(end_group_message)
+                else:
+                    self._mail_lines.append(end_group_message)
