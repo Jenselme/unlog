@@ -94,3 +94,17 @@ def test_filter_end_file():
 
     with open(filtered_output_file, 'r') as correctly_filtered_output:
         assert correctly_filtered_output.read() == output.getvalue()
+
+
+def test_filter_empty_group():
+    file = 'test/program_output_empty_group'
+    filtered_output_file = 'test/program_output_filtered_empty_group'
+    # Test with the file passed as a parameter.
+    output = StringIO()
+    python3(path2main, file,
+            start_pattern='/home/assos/drupal7/sites/assos.centrale-marseille.fr.\w',
+            error_pattern='(error|warning)',
+            _out=output)
+
+    with open(filtered_output_file, 'r') as correctly_filtered_output:
+        assert correctly_filtered_output.read() == output.getvalue()

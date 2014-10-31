@@ -81,11 +81,12 @@ class Filter:
     def print_stack(self):
         """Prints the stack to stdout or add the line the _email_lines list.
         """
-        if self.match() and self._must_display_sdout():
-            for line in self._stack:
-                sys.stdout.write(line)
-        elif self.match():
-            self._mail_lines.extend(self._stack)
+        if not self._empty_group():
+            if self.match() and self._must_display_sdout():
+                for line in self._stack:
+                    sys.stdout.write(line)
+            elif self.match():
+                self._mail_lines.extend(self._stack)
 
     def match(self):
         """Returns True if at least a line of the stack matche the error pattern.
@@ -98,6 +99,12 @@ class Filter:
         """Returns True must the output must be displayed on stdout.
         """
         return self._no_mail or self._mail_to is None
+
+    def _empty_group(self):
+        """Returns True if we are dealing with an empty group, ie this filter
+        has group pattern and the length of the stack is 2 (GROUP START and END).
+        """
+        return self._has_group_patterns() and len(self._stack) == 2
 
     def _must_send_email(self):
         """Returns True if the output must be send by email.
