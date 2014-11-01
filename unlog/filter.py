@@ -6,6 +6,10 @@ from email.mime.text import MIMEText
 class Filter:
     """Defines how to filter.
     """
+    #: This template will be filled by the date and the command.
+    _start_group_template = 'GROUP: {}\n'
+    #: This template will be filled by the date and the command. 
+    _end_group_template = 'END GROUP: {}\n'
 
     def __init__(self, error_pattern="(error|warning)", start_pattern=r".*",
                  no_mail=False, mail_to=None, mail_from='unlog@localhost',
@@ -69,7 +73,7 @@ class Filter:
         and self._start_group_pattern.match(line):
             m = self._start_group_pattern.match(line)
             self._group_message = ' - '.join(m.groups())
-            start_group_message = 'GROUP: {}\n'.format(self._group_message)
+            start_group_message = self._start_group_template.format(self._group_message)
             if self._must_display_sdout():
                 sys.stdout.write(start_group_message)
             else:
@@ -81,12 +85,11 @@ class Filter:
     def print_stack(self):
         """Prints the stack to stdout or add the line the _email_lines list.
         """
-        if not self._empty_group():
-            if self.match() and self._must_display_sdout():
-                for line in self._stack:
-                    sys.stdout.write(line)
-            elif self.match():
-                self._mail_lines.extend(self._stack)
+        if self.match() and self._must_display_sdout():
+            for line in self._stack:
+                sys.stdout.write(line)
+        elif self.match():
+            self._mail_lines.extend(self._stack)
 
     def match(self):
         """Returns True if at least a line of the stack matche the error pattern.
@@ -99,12 +102,6 @@ class Filter:
         """Returns True must the output must be displayed on stdout.
         """
         return self._no_mail or self._mail_to is None
-
-    def _empty_group(self):
-        """Returns True if we are dealing with an empty group, ie this filter
-        has group pattern and the length of the stack is 2 (GROUP START and END).
-        """
-        return self._has_group_patterns() and len(self._stack) == 1
 
     def _must_send_email(self):
         """Returns True if the output must be send by email.
@@ -124,12 +121,24 @@ class Filter:
 
         **RETURN** - a MIMEText containing the message.
         """
+        self._filter_mail_lines()
         msg = MIMEText(''.join(self._mail_lines))
         msg['Subject'] = self._mail_subject
         msg['From'] = self._mail_from
         msg['To'] = self._mail_to
 
         return msg
+    
+    def _filter_mail_lines(self):
+        """toto"""
+        # Remove the dict from the templates to use startwith.
+        start_group = self._start_group_template[:-3]
+        end_group = self._end_group_template[:-3]
+        for index in range(len(self._mail_lines) - 1):
+            if self._mail_lines[index].startswith(start_group) and\
+            self._mail_lines[index + 1].startswith(end_group):
+                self._mail_lines[index] = ''
+                self._mail_lines[index + 1] = ''
 
     def _send_message(self, msg):
         """Send a MIMEText message or print an error to stderr in case of failure.
@@ -166,11 +175,10 @@ class Filter:
         displays it.
         """
         if self._has_group_patterns() and self._end_group_pattern.match(line):
-            end_group_message = 'END GROUP: {}\n'.format(self._group_message)
+            end_group_message = self._end_group_template.format(self._group_message)
             self.print_stack()
             self._stack = []
-            if not self._empty_group():
-                if self._must_display_sdout():
-                    sys.stdout.write(end_group_message)
-                else:
-                    self._mail_lines.append(end_group_message)
+            if self._must_display_sdout():
+                sys.stdout.write(end_group_message)
+            else:
+                self._mail_lines.append(end_group_message)

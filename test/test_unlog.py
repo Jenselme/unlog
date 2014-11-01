@@ -104,6 +104,9 @@ def test_filter_empty_group():
     python3(path2main, file,
             start_pattern='/home/assos/drupal7/sites/assos.centrale-marseille.fr.\w',
             error_pattern='(error|warning)',
+            start_group='#### (?P<command>.+) - (?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})',
+            end_group='#### END',
+            mail_to='jenselme@spam.fr',
             _out=output)
 
     with open(filtered_output_file, 'r') as correctly_filtered_output:
