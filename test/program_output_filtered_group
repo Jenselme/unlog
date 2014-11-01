@@ -39,6 +39,7 @@ Drush was attempting to connect to:
 
 
 END GROUP: Drush cron - 2014-09-14
+
 GROUP: Drush cron - 2014-09-15
 /home/assos/drupal7/sites/assos.centrale-marseille.fr.ksi
 WD php: PDOException: SQLSTATE[HY000] [2002] Operation timed out in  [31;40m[1m[error][0m
@@ -47,3 +48,4 @@ drupal_is_denied() (line 1916 of
 PDOException: SQLSTATE[HY000] [2002] Operation timed out in drupal_is_denied() (line 1916 of /home/assos/drupal7/includes/bootstrap.inc).
 Drush command terminated abnormally due to an unrecoverable error.   [31;40m[1m[error][0m
 END GROUP: Drush cron - 2014-09-15
+

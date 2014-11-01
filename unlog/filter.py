@@ -9,7 +9,7 @@ class Filter:
     #: This template will be filled by the date and the command.
     _start_group_template = 'GROUP: {}\n'
     #: This template will be filled by the date and the command. 
-    _end_group_template = 'END GROUP: {}\n'
+    _end_group_template = 'END GROUP: {}\n\n'
 
     def __init__(self, error_pattern="(error|warning)", start_pattern=r".*",
                  no_mail=False, mail_to=None, mail_from='unlog@localhost',
@@ -133,7 +133,7 @@ class Filter:
         """toto"""
         # Remove the dict from the templates to use startwith.
         start_group = self._start_group_template[:-3]
-        end_group = self._end_group_template[:-3]
+        end_group = self._end_group_template[:-4]
         for index in range(len(self._mail_lines) - 1):
             if self._mail_lines[index].startswith(start_group) and\
             self._mail_lines[index + 1].startswith(end_group):
