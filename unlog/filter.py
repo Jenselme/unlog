@@ -34,7 +34,7 @@ class Filter:
         self._stack = []
         self._mail_lines = []
         self._error_pattern = re.compile(error_pattern, re.I)
-        self._start_patern = re.compile(start_pattern, re.I)
+        self._start_pattern = re.compile(start_pattern, re.I)
         self._no_mail = no_mail
         self._mail_to = mail_to
         self._mail_from = mail_from
@@ -78,7 +78,7 @@ class Filter:
                 sys.stdout.write(start_group_message)
             else:
                 self._mail_lines.append(start_group_message)
-        elif self._start_patern.search(line):
+        elif self._start_pattern.search(line):
             self.print_stack()
             self._stack = []
 
