@@ -63,6 +63,20 @@ def test_mail():
     with open('test/program_output_filtered_mail', 'r') as correctly_filtered_output:
         assert correctly_filtered_output.read() == output.getvalue()
 
+def test_mail_empty_mail():
+    output = StringIO()
+    python3(path2main, 'test/program_output_mail_empty', config='test/test_config', _err=output)
+
+    correctly_filtered_output = ''
+    assert correctly_filtered_output == output.getvalue()
+
+def test_mail_empty_mail_group():
+    output = StringIO()
+    python3(path2main, 'test/program_output_mail_empty_group', config='test/test_config', _err=output)
+
+    correctly_filtered_output = ''
+    assert correctly_filtered_output == output.getvalue()
+
 
 def test_filter_group():
     output = StringIO()

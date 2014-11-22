@@ -103,11 +103,6 @@ class Filter:
         """
         return self._no_mail or self._mail_to is None
 
-    def _must_send_email(self):
-        """Returns True if the output must be send by email.
-        """
-        return not self._must_display_sdout()
-
     def send_mail(self):
         """Send the msg using the localhost as SMTP server. If no SMTP server is
         available on localhost, it will crash.
@@ -115,6 +110,13 @@ class Filter:
         if self._must_send_email():
             msg = self._prepare_message()
             self._send_message(msg)
+
+    def _must_send_email(self):
+        """Returns True if the output must be send by email.
+
+        If there is no data to unlog, no email is send.
+        """
+        return not self._must_display_sdout() and self._mail_lines
 
     def _prepare_message(self):
         """Prepare the _stack so it can be send by email.
