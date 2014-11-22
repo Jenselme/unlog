@@ -51,6 +51,8 @@ class Unlog:
         # The following key are only used when processing from a config file
         del config['config_file']
         del config['use_config_section']
+        # The filter manipulates string in the proper encoding. No need to pass it.
+        del config['log_encoding']
         self._output_filter = Filter(**config)
         # If no files are provided, read from stdin
         if self._args.files:
@@ -63,13 +65,13 @@ class Unlog:
         """Loop on each file given on the command line and process them.
         """
         for file in self._files:
-            self.process_file(file)
+            self.process_file(file, log_encoding=self._args.log_encoding)
 
-    def process_file(self, file_name):
+    def process_file(self, file_name, log_encoding='utf-8'):
         """Open file_name and process it with :py:meth:`unlog.filter.Filter.process_file`
         """
         try:
-            with open(file_name, 'r') as file:
+            with open(file_name, 'r', encoding=log_encoding) as file:
                 self._output_filter.process_file(file)
         except IOError as e:
             sys.stderr.write(str(e))
@@ -120,4 +122,7 @@ class Unlog:
         """
         self._output_filter = self._config.get_filter(file_name)
         if self._output_filter:
-            self.process_file(file_name)
+            if 'encoding' in self._config:
+                self.process_file(file_name, log_encoding=self._config['encoding'])
+            else:
+                self.process_file(file_name)

@@ -7,6 +7,7 @@ usage: main.py [-h] [--start-pattern START_PATTERN]
                [--mail-from MAIL_FROM] [--mail-subject MAIL_SUBJECT]
                [--no-mail] [--start-group START_GROUP_PATTERN]
                [--end-group END_GROUP_PATTERN]
+               [--encoding ENCODING]
                [files [files ...]]
 
 Filter print the line of the output from a starting pattern only if it
@@ -46,6 +47,8 @@ optional arguments:
   --end-group END_GROUP_PATTERN
                         Pattern to end a group. A line that match this pattern
                         will be ignored.
+  --encoding ENCODING
+                        The encoding of the file to unlog. By default it is UTF-8.
 """
 
 import argparse
@@ -92,6 +95,8 @@ def main():
     parser.add_argument('--end-group', dest='end_group_pattern',
                         help='Pattern to end a group. A line that match this '
                         'pattern will be ignored.')
+    parser.add_argument('--encoding', dest='log_encoding', default='utf-8',
+                        help='The encoding of the file to unlog')
     args = parser.parse_args()
 
     Unlog(args)

@@ -16,7 +16,7 @@ class Config():
 
     #: keys that are present in the config file but that must be ignored when creating the Filter object.
     CONFIG_FILTER_KEYS_EXCLUDED = ['files', 'config_file', 'use_config_section',
-                                   'include', ]
+                                   'include', 'log_encoding', ]
 
     def __init__(self, command_line_args):
         """**PARAMETERS**
@@ -31,6 +31,9 @@ class Config():
 
     def __getitem__(self, key):
         return self._config[key]
+
+    def __contains__(self, element):
+        return element in self._config
 
     def get_filter(self, section_name=''):
         """Returns the Filter association with the asked section if it exits.
