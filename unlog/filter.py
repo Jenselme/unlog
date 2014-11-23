@@ -2,6 +2,7 @@ import re
 import sys
 import smtplib
 from email.mime.text import MIMEText
+from builtins import len
 
 class Filter:
     """Defines how to filter.
@@ -116,23 +117,11 @@ class Filter:
 
         If there is no data to unlog, no email is send.
         """
+        self._filter_mail_lines()
         return not self._must_display_sdout() and self._mail_lines
 
-    def _prepare_message(self):
-        """Prepare the _stack so it can be send by email.
-
-        **RETURN** - a MIMEText containing the message.
-        """
-        self._filter_mail_lines()
-        msg = MIMEText(''.join(self._mail_lines))
-        msg['Subject'] = self._mail_subject
-        msg['From'] = self._mail_from
-        msg['To'] = self._mail_to
-
-        return msg
-    
     def _filter_mail_lines(self):
-        """toto"""
+        """Remove the start and end group lines if the group is empty."""
         # Remove the dict from the templates to use startwith.
         start_group = self._start_group_template[:-3]
         end_group = self._end_group_template[:-4]
@@ -141,6 +130,22 @@ class Filter:
             self._mail_lines[index + 1].startswith(end_group):
                 self._mail_lines[index] = ''
                 self._mail_lines[index + 1] = ''
+        self._remove_empty_string_in_mail_lines()
+
+    def _remove_empty_string_in_mail_lines(self):
+        self._mail_lines = [line for line in self._mail_lines if line]
+
+    def _prepare_message(self):
+        """Prepare the _stack so it can be send by email.
+
+        **RETURN** - a MIMEText containing the message.
+        """
+        msg = MIMEText(''.join(self._mail_lines))
+        msg['Subject'] = self._mail_subject
+        msg['From'] = self._mail_from
+        msg['To'] = self._mail_to
+
+        return msg
 
     def _send_message(self, msg):
         """Send a MIMEText message or print an error to stderr in case of failure.
