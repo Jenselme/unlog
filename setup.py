@@ -16,7 +16,7 @@ class PyTest(TestCommand):
 
 setup(
     name = "unlog",
-    version = "0.0.0",
+    version = "1.0.0",
     packages = ['unlog'],
     requires=['sh'],
     tests_require=['pytest'],
@@ -27,7 +27,7 @@ setup(
     license = "MIT",
     keywords="log",
     url = "https://bitbucket.org/Jenselme/dcvsapi",
-    classifiers="""Development Status :: 2 - Pre-Alpha
+    classifiers="""Development Status :: 5 - Production/Stable
 Intended Audience :: Developers
 License :: OSI Approved :: BSD License
 Operating System :: OS Independent
