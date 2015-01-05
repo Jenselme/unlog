@@ -1,4 +1,4 @@
-import glob
+import glob2 as glob
 import os
 import configparser
 import sys
@@ -52,9 +52,19 @@ class Config():
 
         for config_section in self._config:
             config_section_user_expanded = os.path.expanduser(config_section)
-            possible_section_names = glob.glob(config_section_user_expanded)
+            possible_section_names = self._expand_glob(config_section_user_expanded)
             if section_name in possible_section_names:
                 return config_section
+
+    def _expand_glob(self, config_section_user_expanded):
+        """If the glob pattern is relative, expand it to be absolute."""
+        possible_section_names = list()
+        for possible_section_name in glob.glob(config_section_user_expanded):
+            if possible_section_name[0] != '/':
+                possible_section_name = '{}/{}'\
+                    .format(os.getcwd(), possible_section_name)
+            possible_section_names.append(possible_section_name)
+        return possible_section_names
 
     def _get_config_filter(self, section_name, config_section):
         """Returns a dict containing the config for the Filter.
