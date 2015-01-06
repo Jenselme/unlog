@@ -26,7 +26,7 @@ setup(
     description = "Python script to easy unloging.",
     license = "MIT",
     keywords="log",
-    url = "https://bitbucket.org/Jenselme/dcvsapi",
+    url = "https://github.com/Jenselme/unlog",
     classifiers="""Development Status :: 5 - Production/Stable
 Intended Audience :: Developers
 License :: OSI Approved :: MIT License
