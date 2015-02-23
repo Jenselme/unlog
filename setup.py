@@ -18,7 +18,7 @@ setup(
     name = "unlog",
     version = "1.0.0",
     packages = ['unlog'],
-    requires=['sh'],
+    requires=['sh', 'glob2'],
     tests_require=['pytest'],
     cmdclass = {'test': PyTest},
     author = "Julien Enselme",
