@@ -1,5 +1,5 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
+
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 

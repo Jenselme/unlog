@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 """
 usage: main.py [-h] [--start-pattern START_PATTERN]
