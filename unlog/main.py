@@ -5,6 +5,7 @@ usage: main.py [-h] [--start-pattern START_PATTERN]
                [--error-pattern ERROR_PATTERN] [--config CONFIG_FILE]
                [--use-config-section USE_CONFIG_SECTION] [--mail-to MAIL_TO]
                [--mail-from MAIL_FROM] [--mail-subject MAIL_SUBJECT]
+               [--mail-server SMTP_SERVER]
                [--no-mail] [--start-group START_GROUP_PATTERN]
                [--end-group END_GROUP_PATTERN]
                [--encoding ENCODING]
@@ -40,6 +41,9 @@ optional arguments:
                         this parameter override it.
   --mail-subject MAIL_SUBJECT
                         The subject of the email to send.
+  --mail-server
+                        The SMTP server to use. Can also be sendmail. Default is
+                        localhost.
   --no-mail             Print the output to stdout, even if a mail address is
                         provided.
   --start-group START_GROUP_PATTERN
@@ -87,6 +91,10 @@ def main():
                         ' this parameter override it.')
     parser.add_argument('--mail-subject', dest='mail_subject',
                         help='The subject of the email to send.')
+
+    parser.add_argument('--mail-server', dest='mail_server', default='localhost',
+                        help='The SMTP server to use. Can also be sendmail.'
+                        ' Default is localhost.')
     parser.add_argument('--no-mail', dest='no_mail', action='store_true',
                         help='Print the output to stdout, even if a mail address'
                         ' is provided.')

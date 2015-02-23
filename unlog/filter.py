@@ -3,6 +3,7 @@ import sys
 import smtplib
 from email.mime.text import MIMEText
 from builtins import len
+from subprocess import Popen, PIPE
 
 class Filter:
     """Defines how to filter.
@@ -15,7 +16,7 @@ class Filter:
     def __init__(self, error_pattern="(error|warning)", start_pattern=r".*",
                  no_mail=False, mail_to=None, mail_from='unlog@localhost',
                  mail_subject='Unlog report', start_group_pattern=None,
-                 end_group_pattern=None):
+                 end_group_pattern=None, mail_server='localhost'):
         """**PARAMETERS**
 
     * *error_pattern* - A regular expression that match the lines containing the
@@ -31,6 +32,7 @@ class Filter:
        of a log group (eg the ouput of one command). Default: None.
     * *end_group_pattern* - An optional regual expression matching the end of a
       log group. Default: None.
+    * *mail_server* - The SMTP server to use. Can also be sendmail.
         """
         self._stack = []
         self._mail_lines = []
@@ -45,6 +47,7 @@ class Filter:
         self._end_group_pattern = re.compile(end_group_pattern) \
                                     if end_group_pattern else None
         self._group_message = ''
+        self._mail_server = mail_server
 
     def process_file(self, file):
         """Loop over each line of a file and process them with
@@ -151,11 +154,16 @@ class Filter:
         """Send a MIMEText message or print an error to stderr in case of failure.
         """
         try:
-            s = smtplib.SMTP('localhost')
-            err = s.send_message(msg)
-            if err:
-                print(err)
-            s.quit()
+            if self._mail_server.endswith('/sendmail'):
+                # Use sendmail instead of an SMTP server
+                p = Popen(["/usr/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
+                p.communicate(msg.as_string())
+            else:
+                s = smtplib.SMTP(self._mail_server)
+                err = s.send_message(msg)
+                if err:
+                    print(err)
+                s.quit()
         except Exception as e:
             sys.stderr.write('Sending email failed with the following message:\n')
             sys.stderr.write(str(e))
